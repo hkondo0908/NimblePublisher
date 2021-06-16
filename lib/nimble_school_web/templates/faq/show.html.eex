@@ -1,0 +1,9 @@
+<%= link "<- All Faqs", to: Routes.faq_path(@conn, :index)%>
+<h1>Q:<%= @faq.question %></h1>
+<p>
+    written by <%= @faq.author%>
+</p>
+<p>
+ Tagged as <%= Enum.join(@faq.tags, ", ")%>
+</p>
+<h3><b><%= raw @faq.answer%></b></h3>

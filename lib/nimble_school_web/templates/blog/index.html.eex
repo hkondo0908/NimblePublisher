@@ -1,0 +1,59 @@
+<style>
+    div#post{
+        float: left;
+    }
+    div.recent{
+        text-align: right;
+        padding-right: 90px;
+        margin-right: 90px;
+    }
+</style>
+<h1>Listing all posts</h1>
+<%= link "FAQ", to: Routes.faq_path(@conn,:index)%>
+<%= link "tag-posts", to: Routes.blog_path(@conn, :tags)%><br>
+<%= link "recent-posts", to: Routes.blog_path(@conn, :recent)%>
+<hr>
+<h3>Tags</h3>
+<%= for tag <- @tags do%>
+    <ul>
+        <li>
+            <%=link "#{tag}", to: Routes.blog_path(@conn, :getByTag, tag)%>
+        </li>
+    </ul>
+<%end%>
+<hr>
+<div class="wrapper">
+<div id = "post">
+<%= for post <- @posts do%>
+  <div id="<% post.id%>" style="margin-bottom: 3rem;">
+    <h2>
+      <%= link post.title, to: Routes.blog_path(@conn, :show, post)%>
+    </h2>
+    <p>
+      <time><%= post.date%></time> by <%= post.author%>
+    </p>
+    <p>
+      Tagged as <% Enum.join(post.tags, ", ")%>
+    </p>
+    <%= raw post.description%>
+  </div>
+<% end%>
+</div>
+<div class="recent">
+    <%= for post <- @recents do%>
+  <div id="<% post.id%>" style="margin-bottom: 3rem;">
+    <h2>
+      <%= link post.title, to: Routes.blog_path(@conn, :show, post)%>
+    </h2>
+    <p>
+      <time><%= post.date%></time> by <%= post.author%>
+    </p>
+    <p>
+      Tagged as <% Enum.join(post.tags, ", ")%>
+    </p>
+    <%= raw post.description%>
+  </div>
+<% end%>
+</div>
+
+</div>

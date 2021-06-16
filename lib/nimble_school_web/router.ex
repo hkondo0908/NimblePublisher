@@ -1,0 +1,52 @@
+defmodule NimbleSchoolWeb.Router do
+  use NimbleSchoolWeb, :router
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/", NimbleSchoolWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
+    get "/blog", BlogController, :index
+    get "/blog/by/tags", BlogController, :tags
+    get "/blog/:id", BlogController, :show
+    get "/blog/recent/post", BlogController, :recent
+    get "/blog/get/:tag", BlogController, :getByTag
+    get "/faq", FaqController, :index
+    get "/faq/by/tags", FaqController, :tags
+    get "/faq/:id", FaqController, :show
+    get "/faq/get/:tag", FaqController, :getByTag
+
+  end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", NimbleSchoolWeb do
+  #   pipe_through :api
+  # end
+
+  # Enables LiveDashboard only for development
+  #
+  # If you want to use the LiveDashboard in production, you should put
+  # it behind authentication and allow only admins to access it.
+  # If your application does not have an admins-only section yet,
+  # you can use Plug.BasicAuth to set up some basic authentication
+  # as long as you are also using SSL (which you should anyway).
+  if Mix.env() in [:dev, :test] do
+    import Phoenix.LiveDashboard.Router
+
+    scope "/" do
+      pipe_through :browser
+      live_dashboard "/dashboard", metrics: NimbleSchoolWeb.Telemetry
+    end
+  end
+end
